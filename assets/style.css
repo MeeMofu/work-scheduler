@@ -49,9 +49,10 @@ textarea{
 
 .clearBtn{
   display: flex;
-  align-self: center;
   position: absolute;
-  left: -20px;
+  left: -23px;
+  top: 3px;
+  /* align-self: center; */
 }
 
 
