@@ -1,9 +1,31 @@
-
 var eventList;
+var stamp = ['09:00am','10:00am','11:00am','12:00pm','01:00pm','02:00pm','03:00pm','04:00pm','05:00pm'];
+var startTime = 9;
+
+var timing = function(){
+    // Update header
+    $("#currentDay").text(moment().format("dddd, MMMM Do YYYY"));
+
+    // Update time table
+    var currHour = parseInt(moment().format("kk"));
+    var currHour = parseInt(moment().hour(10).format("kk")); 
+    // loop over each field
+    for (var i=0;i<stamp.length;i++){
+        var event = $("[data-field='"+i+"']").find(".event");
+        event.removeClass("past present future");
+        if (currHour>(i+startTime)){
+            event.addClass("past");
+            console.log(i);
+        } else if (currHour === (i+startTime)) {
+            event.addClass("present");
+        } else {
+            event.addClass("future");
+        }
+        
+    }
+}
 
 var createFields = function(){
-    var stamp = ['09:00am','10:00am','11:00am','12:00pm','01:00pm','02:00pm','03:00pm','04:00pm','05:00pm'];
-    
     eventList = JSON.parse(localStorage.getItem("eventList"));
     if (!eventList){
         eventList = Array(stamp.length).fill(' ');
@@ -21,6 +43,7 @@ var createFields = function(){
         $(".container").append(field);
         $("button").hide();
     }
+    timing();
 }
 
 
@@ -40,12 +63,12 @@ $(".container").on("click", ".event",function(){
             complete: function(){
                 rowEl.find(".saveBtn").show({
                     effect:"slide",
-                    duration:100,
+                    duration:200,
                     // once finished, show the text field and clear button
                     complete: function(){
                         rowEl.find(".clearBtn").show();
                         var textInput = $("<textarea>")
-                            .addClass("form-control mr-3 my-2")
+                            .addClass("form-control bg-transparent border-0 mr-3 my-2")
                             .attr("rows",2)
                             .val(text);
                         rowEl.find(".event p").replaceWith(textInput);
@@ -56,14 +79,6 @@ $(".container").on("click", ".event",function(){
         })
         
 });
-// $(".container").on("blur","textarea",function(){
-//     var text = $(this)
-//     .val()
-//     .trim();
-//     var newEvent = $("<p>")
-//     .text(text);
-//     $(this).replaceWith(newEvent);
-// });
 
 // Save the updated field
 var save = function(rowEl){
@@ -79,7 +94,7 @@ var reset = function(rowEl){
     // Hide save button
     rowEl.find(".saveBtn").hide({
         effect: "slide",
-        duration: 100,
+        duration: 200,
         // Once completed, hide clear and reset field size
         complete: function(){
             rowEl.find(".clearBtn").hide();
@@ -113,3 +128,7 @@ $(".container").on("click",".clearBtn",function(){
 });
 
 createFields();
+
+setInterval(function(){
+    timing();
+}, 5*60*1000); // Update every 5 min
