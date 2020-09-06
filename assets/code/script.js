@@ -8,7 +8,7 @@ var timing = function(){
 
     // Update time table
     var currHour = parseInt(moment().format("kk"));
-    var currHour = parseInt(moment().hour(10).format("kk")); 
+    // var currHour = parseInt(moment().hour(10).format("kk")); 
     // loop over each field
     for (var i=0;i<stamp.length;i++){
         var event = $("[data-field='"+i+"']").find(".event");
